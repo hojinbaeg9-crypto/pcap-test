@@ -14,7 +14,7 @@ struct ethernet_hdr
 
 struct ipv4_hdr
 {
-    //리틀 엔디안을 맞춰주기 위해 version과 ihl 순서 반대로
+    //리틀 엔디안 환경에서는 하위 비트부터 채워져 version과 ihl 순서 반대로
     uint8_t ihl : 4, version : 4;       
     uint8_t tos;       /* type of service */
     uint16_t tot_len;         /* total length */
@@ -33,7 +33,7 @@ struct tcp_hdr
     uint16_t dst_port;       /* destination port */
     uint32_t seq_num;          /* sequence number */
     uint32_t ack_num;          /* acknowledgement number */
-	//리틀 엔디안을 맞춰주기 위해 reserved와 data_offset 순서 반대로
+	//리틀 엔디안 환경에서는 하위 비트부터 채워져 data_offset과 reserved 순서 반대로
     uint8_t reserved : 4, data_offset : 4;        /* data offset */
     uint8_t  flags;       /* control flags */
     uint16_t window;         /* window */
