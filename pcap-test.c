@@ -98,9 +98,9 @@ int main(int argc, char* argv[]) {
         struct ipv4_hdr* ip;
         struct tcp_hdr* tcp;
         uint16_t data_len = 0;
-	uint8_t ip_header_len = 0;
-	uint8_t tcp_header_len = 0; 
-	uint32_t src_ip, dst_ip;
+		uint8_t ip_header_len = 0;
+		uint8_t tcp_header_len = 0; 
+		uint32_t src_ip, dst_ip;
 
         /*
         int pcap_next_ex(
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
         
         ethernet = (struct ethernet_hdr*)packet;
         if (ntohs(ethernet->protocol) != 0x0800) {
-		printf("Not an IPv4 packet\n");
+			printf("Not an IPv4 packet\n");
         	continue;
         } //IPv4 패킷이 아니면 다시 시도
         
@@ -133,45 +133,45 @@ int main(int argc, char* argv[]) {
         ip = (struct ipv4_hdr*)(packet + sizeof(*ethernet));
         //TCP 패킷이 아니면 다시 시도
         if (ip->protocol != 6) {
-		printf("Not a TCP packet\n");
+			printf("Not a TCP packet\n");
         	continue;
         }
-	ip_header_len = (ip->ihl) << 2; 
+		ip_header_len = (ip->ihl) << 2; 
 
 		
         tcp = (struct tcp_hdr*)(packet + sizeof(*ethernet) + ip_header_len);
-	tcp_header_len = (tcp->data_offset) << 2; 
+		tcp_header_len = (tcp->data_offset) << 2; 
 
         //데이터 길이 계산
-	data_len = ntohs(ip->tot_len) - ip_header_len - tcp_header_len;
+		data_len = ntohs(ip->tot_len) - ip_header_len - tcp_header_len;
 
         //캡쳐한 길이가 ethernet header + ip header + tcp header보다 작으면 다시 시도
         if (header->caplen < sizeof(*ethernet) + ip_header_len + tcp_header_len) {
-		printf("Captured length is less than the sum of Ethernet, IP, and TCP headers\n");
+			printf("Captured length is less than the sum of Ethernet, IP, and TCP headers\n");
         	continue;
         }
 
         //Ethernet Header의 src mac / dst mac
-	printf("<Ethernet Header>\n"); 
-	printf("src mac: %02x:%02x:%02x:%02x:%02x:%02x\n", ethernet->src[0], ethernet->src[1], ethernet->src[2], ethernet->src[3], ethernet->src[4], ethernet->src[5]);
-	printf("dst mac: %02x:%02x:%02x:%02x:%02x:%02x\n", ethernet->dst[0], ethernet->dst[1], ethernet->dst[2], ethernet->dst[3], ethernet->dst[4], ethernet->dst[5]);
+		printf("<Ethernet Header>\n"); 
+		printf("src mac: %02x:%02x:%02x:%02x:%02x:%02x\n", ethernet->src[0], ethernet->src[1], ethernet->src[2], ethernet->src[3], ethernet->src[4], ethernet->src[5]);
+		printf("dst mac: %02x:%02x:%02x:%02x:%02x:%02x\n", ethernet->dst[0], ethernet->dst[1], ethernet->dst[2], ethernet->dst[3], ethernet->dst[4], ethernet->dst[5]);
         
         //IP Header의 src ip / dst ip
-	printf("\n<IP Header>\n");  
-	src_ip = ntohl(ip->src_add);
-	dst_ip = ntohl(ip->dst_add);    
-	printf("src ip: %u.%u.%u.%u\n", (src_ip >> 24) & 0xFF, (src_ip >> 16) & 0xFF, (src_ip >> 8) & 0xFF, src_ip & 0xFF); 
-	printf("dst ip: %u.%u.%u.%u\n", (dst_ip >> 24) & 0xFF, (dst_ip >> 16) & 0xFF, (dst_ip >> 8) & 0xFF, dst_ip & 0xFF);
+		printf("\n<IP Header>\n");  
+		src_ip = ntohl(ip->src_add);
+		dst_ip = ntohl(ip->dst_add);    
+		printf("src ip: %u.%u.%u.%u\n", (src_ip >> 24) & 0xFF, (src_ip >> 16) & 0xFF, (src_ip >> 8) & 0xFF, src_ip & 0xFF); 
+		printf("dst ip: %u.%u.%u.%u\n", (dst_ip >> 24) & 0xFF, (dst_ip >> 16) & 0xFF, (dst_ip >> 8) & 0xFF, dst_ip & 0xFF);
 		
         //TCP Header의 src port / dst port
-	printf("\n<TCP Header>\n");
-	printf("src port: %u\n", ntohs(tcp->src_port));
-	printf("dst port: %u\n", ntohs(tcp->dst_port));
+		printf("\n<TCP Header>\n");
+		printf("src port: %u\n", ntohs(tcp->src_port));
+		printf("dst port: %u\n", ntohs(tcp->dst_port));
 	
         //Payload(Data)의 hexadecimal value(최대 20바이트까지만)
         if(data_len > 0) printf("\n<Payload>\n");
-	for (int i = 0; i < data_len && i < 20; i++) {
-		printf("%02x ", packet[sizeof(*ethernet) + ip_header_len + tcp_header_len + i]);
+		for (int i = 0; i < data_len && i < 20; i++) {
+			printf("%02x ", packet[sizeof(*ethernet) + ip_header_len + tcp_header_len + i]);
         }
 
         //실제로 캡쳐한 길이 출력
