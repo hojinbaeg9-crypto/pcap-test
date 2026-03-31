@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 
     char errbuf[PCAP_ERRBUF_SIZE];
     //pcap_open_live(인터페이스, 캡쳐할 바이트 수
-    //, 1:모든 패킷/2:내 컴퓨터 패킷
+    //, 1:모든 패킷/0:내 컴퓨터 패킷
     //, 패킷읽기 타임아웃(ms)
     //, 에러 메시지를 담을 버퍼)
     //반환값은 성공->핸들, 실패->NULL
